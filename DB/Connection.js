@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
+var config = require('./config.json');
+const uri = config.MonogoDB_Uri
 
-const uri = "mongodb+srv://itayguetta:12345678g@cluster0-cvv2x.mongodb.net/test?retryWrites=true&w=majority";
 const connectDB = async()=>{
-  await  mongoose.connect(uri,{ useNewUrlParser: true , useUnifiedTopology: true });
-  console.log("database connected ! ");
+  await  mongoose.connect(uri,{ useNewUrlParser: true , useUnifiedTopology: true }).then(
+    ()=>console.log("MongoDB connected ! ")).catch((err) => console.log(err))
 }
 
 module.exports = connectDB;

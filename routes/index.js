@@ -2,7 +2,7 @@
 const express = require('express');
 const route = express.Router();
 
-route.get('/',(req,res ) => res.send('Welcome'));
 
+route.get('/',(req,res ) => res.render('home_page'));
 
 module.exports = route;
