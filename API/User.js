@@ -3,6 +3,12 @@ const mongoose = require('mongoose');
 const User = require('../DB/User.js');
 const route = express.Router();
 
+
+
+
+
+
+
 route.post('/' , async(req,res)=>{
     const{firstName ,lastName} = req.body;
     let user = {};
@@ -13,5 +19,7 @@ route.post('/' , async(req,res)=>{
     res.json(userModel);
 
 });
+
+
 
 module.exports = route;
