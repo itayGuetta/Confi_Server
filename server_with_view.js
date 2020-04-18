@@ -10,7 +10,7 @@ app.use(expressLayouts);
 app.set('view engine','ejs');
 
 //BodyParser 
-app.use(express.json({extanded:false}))
+app.use(express.urlencoded({ extended: false }))
 
 //Routes
 app.use('/api/userModel',require('./API/User'));
