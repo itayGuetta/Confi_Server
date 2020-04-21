@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-var config = require('./config.json');
+var config = require('../configs/config.json');
 const uri = config.MonogoDB_Uri
 
 const connectDB = async()=>{

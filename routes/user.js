@@ -2,6 +2,7 @@
 const express = require('express');
 const route = express.Router();
 const bcrypt = require('bcryptjs');
+const passport = require('passport');
 
 //User Model 
 const User = require('../DB/User');
@@ -52,14 +53,20 @@ route.post('/register' , (req,res)=>{
                     //set Password to Hash 
                     newUser.password = hash;
                     newUser.save().then( user =>{
-                        res.redirect('/')
+                    res.redirect('/users/login');
                     }).catch(err => console.log(err));
-            }));
+            }))
         }
     });
     }
 });
 
-
+route.post('/login', (req, res, next) => {
+    passport.authenticate('local', {
+      successRedirect: '/dashboard',
+      failureRedirect: '/users/login',
+    })(req, res, next);
+});
+  
 
 module.exports = route;
