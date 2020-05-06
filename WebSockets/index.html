@@ -1,0 +1,59 @@
+<!DOCTYPE <!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        
+        <title>WebSocket</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        <style>
+        div#chat{
+            width: 800px;
+            height: 300px;
+            margin: 0 auto;
+            border: 2px solid blue;
+            border-radius: 10px;
+        }
+
+        </style>
+
+    </head>
+    <body>
+        
+
+        <div id="chat"> </div>
+
+
+
+        <input type="text" placeholder=" Enter your Massage" id="input1" >  </input>
+        <button>
+            Send Hey ! 
+        </button>
+
+        <script>
+            var sock = new WebSocket("ws://localhost:5002");
+
+            var chat = document.getElementById('chat');
+            sock.onopen = function(event) { 
+                alert(' Sockct Succsesfully connected ');
+                setTimeout(function() {
+                    sock.send("Hey - First Massege");
+                },1000);
+            };
+            sock.onmessage = function(event) {
+                console.log(event);
+                chat.innerHTML += event.data+"<br>";
+            }
+            document.querySelector("button").onclick = function(){
+                
+                var text = document.getElementById('input1').value;
+                sock.send(text)
+            }
+        </script>
+
+    </body>
+</html>
