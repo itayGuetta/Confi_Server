@@ -18,6 +18,10 @@
             border: 2px solid blue;
             border-radius: 10px;
         }
+        div#sendM{
+            width: 235px;
+            margin: 30px auto;
+        }
 
         </style>
 
@@ -28,30 +32,40 @@
         <div id="chat"> </div>
 
 
-
-        <input type="text" placeholder=" Enter your Massage" id="input1" >  </input>
-        <button>
-            Send Hey ! 
-        </button>
-
+        <div id="sendM">
+            <input type="text" placeholder=" Enter your Massage" id="input1" >  </input>
+            <button>Send</button>
+        </div>
         <script>
-            var sock = new WebSocket("ws://localhost:5002");
 
+            var name = prompt("What is your username ");
+
+
+            var sock = new WebSocket("ws://localhost:5002");
             var chat = document.getElementById('chat');
+
+           
             sock.onopen = function(event) { 
-                alert(' Sockct Succsesfully connected ');
-                setTimeout(function() {
-                    sock.send("Hey - First Massege");
-                },1000);
+                send(JSON.stringify({
+                    type: "name",
+                    data: name
+                }));
             };
             sock.onmessage = function(event) {
                 console.log(event);
                 chat.innerHTML += event.data+"<br>";
             }
             document.querySelector("button").onclick = function(){
-                
                 var text = document.getElementById('input1').value;
-                sock.send(text)
+                if(text == ""){
+                    alert(' Cant send emptey massage ! ');
+                }else{
+                sock.send(JSON.stringify({
+                    type:"massage",
+                    data: text
+                }));
+                chat.innerHTML += name + " - "+ text + " <br>";
+                }
             }
         </script>
 
