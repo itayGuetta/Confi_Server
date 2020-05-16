@@ -40,20 +40,21 @@
 
             var name = prompt("What is your username ");
 
-
             var sock = new WebSocket("ws://localhost:5002");
             var chat = document.getElementById('chat');
 
            
             sock.onopen = function(event) { 
-                send(JSON.stringify({
+                sock.send(JSON.stringify({
                     type: "name",
                     data: name
                 }));
             };
             sock.onmessage = function(event) {
                 console.log(event);
-                chat.innerHTML += event.data+"<br>";
+                var json = JSON.parse(event.data);
+                console.log(json)
+                chat.innerHTML +=json.name+":"+json.data+"<br>";
             }
             document.querySelector("button").onclick = function(){
                 var text = document.getElementById('input1').value;
@@ -64,7 +65,7 @@
                     type:"massage",
                     data: text
                 }));
-                chat.innerHTML += name + " - "+ text + " <br>";
+                chat.innerHTML += " ME - "+ text + " <br>";
                 }
             }
         </script>
