@@ -22,19 +22,32 @@
             width: 235px;
             margin: 30px auto;
         }
+        div#clients{
+            height: 100px;
+            margin-right: 0px;
+            margin-left: 700px;
+            border: 2px solid crimson;
+            border-radius: 10px;
+        }
 
         </style>
 
     </head>
     <body>
         
+        <h2 id="username">User Name </h2>
+        <div id="chat"> 
+            <div id="clients"></div>
+        </div>
 
-        <div id="chat"> </div>
-
+        
 
         <div id="sendM">
             <input type="text" placeholder=" Enter your Massage" id="input1" >  </input>
-            <button>Send</button>
+            <button id="sendmessge">Send</button>
+        </div>
+        <div id="sendM">
+            <button id="refresh ">Refresh Clients </button>
         </div>
         <script>
 
@@ -42,20 +55,31 @@
 
             var sock = new WebSocket("ws://localhost:5002");
             var chat = document.getElementById('chat');
-
+            var username = document.getElementById('username');
+            var clients = document.getElementById('clients');
            
             sock.onopen = function(event) { 
                 sock.send(JSON.stringify({
                     type: "name",
                     data: name
-                }));
+                })).then((event) => document.getElementById('username').innerHTML = name).catch(()=>console.log("error"));
             };
             sock.onmessage = function(event) {
-                console.log(event);
                 var json = JSON.parse(event.data);
                 console.log(json)
-                chat.innerHTML +=json.name+":"+json.data+"<br>";
-            }
+                if(json.type == "getClients"){
+                    json.data.forEach(element => {
+                        clients.innerHTML += element.data+"<br>"; 
+                    });
+                }else{
+                    chat.innerHTML +=json.name+":"+json.data+"<br>";                
+                }
+            };
+            document.querySelector("refresh").onclick = function(){
+                sock.send(JSON.stringify({
+                    type:"getClients"
+                })); 
+            };
             document.querySelector("button").onclick = function(){
                 var text = document.getElementById('input1').value;
                 if(text == ""){
@@ -65,9 +89,10 @@
                     type:"massage",
                     data: text
                 }));
-                chat.innerHTML += " ME - "+ text + " <br>";
-                }
-            }
+                chat.innerHTML += " ME - "+ text + " <br>";                
+
+                };
+            };
         </script>
 
     </body>
