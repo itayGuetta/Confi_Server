@@ -7,9 +7,8 @@ var clients = [];
 serv.on('connection' , function(ws){
     ws.on('message', function(massege){
 
-        massege = JSON.parse(massege);
-        console.log("from : " + massege.data +"  Recived : "+ws.personName);
-       
+        var massege = JSON.parse(massege);
+
         if(massege.type == "name"){
             if(clients.includes(massege.data)){
                 ws.send(JSON.stringify({
@@ -18,22 +17,20 @@ serv.on('connection' , function(ws){
                 }));
             }else{
                 ws.personName = massege.data
+                console.log("new User Logedin - " + ws.personName);
                 clients.push(ws.personName);
+                return ws;
             }
-            return;
         }
 
         if(massege.type == "getClients"){
-            console.log(clients)
             ws.send(JSON.stringify({
                 type:"getClients",
-                name:"clients",
                 data:clients
             }));
+            return;
         }
         
-        
-
         serv.clients.forEach(function (client){
             if(client != ws)
                 client.send(JSON.stringify({
@@ -41,24 +38,19 @@ serv.on('connection' , function(ws){
                     data: massege.data
                 }));
         });
-
-
-
-        if(massege == "Hello"){
-            ws.send("Hello to you to ! (server :) ) ")
-        }else{
-            ws.send("From - server : "+massege)
-        }
-
+        
     });
-    ws.send('hello from the server!');
-    ws.on('close' , function(ws){
-        console.log("I lost A client");
+
+    //When Connection logout 
+    ws.on('close' , function(){
+        console.log(serv.clients)
+        console.log("I lost A client" , ws.personName);
         clients = clients.filter(e => e !== ws.personName); 
+        console.log(clients)
     });
 
     //When new connection to socket happen
-    serv.on('connection', (ws) => {
+    serv.on('connection', () => {
         console.log("Number of Clients : "+ serv.clients.size);
     });
 

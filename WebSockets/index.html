@@ -28,33 +28,52 @@
             margin-left: 700px;
             border: 2px solid crimson;
             border-radius: 10px;
+            overflow: scroll;
+        }
+        #remaining_height_with_scrollbar {
+        background-color: white;
+        width: 800px;
+        height: 300px;
+        margin: 0 auto;
+        border: 2px solid blue;
+        border-radius: 10px;
+        overflow: visible;
+        /* If you change this to "scroll" or "auto", the content disappears */
         }
 
+        div#Number_of_Users {
+        width:50px;
+        height:50px;
+        border:3px solid green;
+        border-radius:250px;
+        line-height:50px;
+        text-align:center;
+        display:inline-block;
+        }
         </style>
 
     </head>
     <body>
         
-        <h2 id="username">User Name </h2>
-        <div id="chat"> 
+        <h2 id="username">User Name </h2>  
+        <div id="remaining_height_with_scrollbar">
             <div id="clients"></div>
         </div>
 
-        
-
+        <div id="Number_of_Users">0</div>
         <div id="sendM">
-            <input type="text" placeholder=" Enter your Massage" id="input1" >  </input>
-            <button id="sendmessge">Send</button>
+            <input type="text" placeholder=" Enter your Massage" id="input1"> </input>
+            <button id="sendmessge" onclick="sendMassge()">Send</button>
         </div>
         <div id="sendM">
-            <button id="refresh ">Refresh Clients </button>
+            <button id="refresh" onclick="refreshUsers()">Refresh Clients </button>
         </div>
         <script>
 
-            var name = prompt("What is your username ");
+            var name = prompt("What is your username");
 
             var sock = new WebSocket("ws://localhost:5002");
-            var chat = document.getElementById('chat');
+            var chat = document.getElementById('remaining_height_with_scrollbar');
             var username = document.getElementById('username');
             var clients = document.getElementById('clients');
            
@@ -62,37 +81,41 @@
                 sock.send(JSON.stringify({
                     type: "name",
                     data: name
-                })).then((event) => document.getElementById('username').innerHTML = name).catch(()=>console.log("error"));
+                }));
+                username.innerHTML = name;
             };
             sock.onmessage = function(event) {
                 var json = JSON.parse(event.data);
-                console.log(json)
-                if(json.type == "getClients"){
+                console.log(json.data)
+                if(json.type == "getClients"){  
+                    clients.innerHTML = " ";
                     json.data.forEach(element => {
-                        clients.innerHTML += element.data+"<br>"; 
+                        console.log(element)
+                        clients.innerHTML += element+"<br>"; 
                     });
+                    console.log(json.data.length);
+                    document.getElementById('Number_of_Users').innerHTML = json.data.length;
                 }else{
-                    chat.innerHTML +=json.name+":"+json.data+"<br>";                
+                    chat.innerHTML +=json.name+":"+json.data+"<br>";                   
                 }
             };
-            document.querySelector("refresh").onclick = function(){
+            function refreshUsers(){
                 sock.send(JSON.stringify({
                     type:"getClients"
                 })); 
-            };
-            document.querySelector("button").onclick = function(){
+            }
+            function sendMassge(){
                 var text = document.getElementById('input1').value;
                 if(text == ""){
-                    alert(' Cant send emptey massage ! ');
+                    alert(' Cant send emptey massage !');
                 }else{
-                sock.send(JSON.stringify({
-                    type:"massage",
-                    data: text
-                }));
-                chat.innerHTML += " ME - "+ text + " <br>";                
-
-                };
-            };
+                    sock.send(JSON.stringify({
+                        type:"massage",
+                        data: text
+                    }));
+                    chat.innerHTML += " ME - "+ text + " <br>";                
+                }
+            }
         </script>
 
     </body>
