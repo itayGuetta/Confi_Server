@@ -2,5 +2,4 @@
 infrastructure for web applications - Node.js &  Express & Mongoose & More ! 
 
 
-![Image of Yaktocat]
-(https://octodex.github.com/images/yaktocat.png)
+![Image of Logo](https://github.com/itayGuetta/confi_Server/blob/master/Confi_Server_logo.png)
