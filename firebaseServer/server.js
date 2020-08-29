@@ -1,6 +1,8 @@
 
 // /Loading Firebase Package
-var firebase = require("firebase");
+var firebase = require("./node_modules/firebase");
+
+// Made by I.G
 
 /**
 * Update your Firebase Project
