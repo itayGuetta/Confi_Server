@@ -1,5 +1,4 @@
-<a href="https://app.daily.dev/DailyDevTips"><img src="https://github.com/rebelchris/rebelchris/blob/master/devcard.svg" width="400" alt="Chris Bongers's Dev Card"/></a>
-
+<a href="https://app.daily.dev/suggerdaday"><img src="https://api.daily.dev/devcards/20264fc9af6143099f445c68d2e30ba2.png?r=spo" width="400" alt="suggerr's Dev Card"/></a>
 
 
 # Confi_Server
